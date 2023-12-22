@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cricket Scores</title>
+</head>
+<body>
+
+<h1>Cricket Scores</h1>
+
+<div id="scores-container"></div>
+
+<script>
+    // Fetch data from the provided API link
+    fetch("https://api.cricapi.com/v1/cricScore?apikey=3fd30251-ae08-4327-9191-5597ad0d6971")
+        .then(response => response.json())
+        .then(data => {
+            // Process the data and display scores
+            const scoresContainer = document.getElementById("scores-container");
+
+            data.data.forEach(match => {
+                const matchDiv = document.createElement("div");
+                matchDiv.innerHTML = `
+                    <h2>${match.t1} vs ${match.t2}</h2>
+                    <p>Match Type: ${match.matchType}</p>
+                    <p>Status: ${match.status}</p>
+                    <p>Match Start Time: ${match.dateTimeGMT}</p>
+                    <img src="${match.t1img}" alt="${match.t1}">
+                    <img src="${match.t2img}" alt="${match.t2}">
+                `;
+                scoresContainer.appendChild(matchDiv);
+            });
+        })
+        .catch(error => console.error("Error fetching data:", error));
+</script>
+
+</body>
+</html>

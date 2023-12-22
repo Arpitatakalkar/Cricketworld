@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cricket World</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <script src="main.js"></script>
+</head>
+<body>
+
+<header>
+    <div>
+        <h1>Cricket World</h1>
+        <p>Bringing You Live Action</p>
+    </div>
+    <nav>
+        <ul>
+            <li><a href="http://127.0.0.1:5500/matches.html" >Current Matches</li>
+            <li><a href="http://127.0.0.1:5500/score.html" >Scores</a></li>
+            <li><a href="http://127.0.0.1:5500/Mlist.html" >Matches list</a></li>
+            <li><a href="http://127.0.0.1:5500/Plist.html" >Players list</a></li>
+            
+        </ul>
+    </nav>
+</header>
+
+<section id="Current Matches">
+    <h2><a href="http://127.0.0.1:5500/matches.html" >Current Matches</a></h2>
+    <!-- Current Matches like highlights, upcoming events, etc. -->
+</section>
+
+<section id="scores">
+    <h2><a href="http://127.0.0.1:5500/score.html" >Scores</a></h2>
+   
+    <!--scores dynamically updated using jQuery -->
+</section>
+
+<section id="Matches list">
+    <h2><a href="http://127.0.0.1:5500/Mlist.html" >Matches list</a></h2>
+    <!-- Matches list information, logos, and details -->
+</section>
+
+<section id="Players list">
+    <h2><a href="http://127.0.0.1:5500/Plist.html" >Players list</a></h2>
+    <!-- Players list dynamically updated using jQuery -->
+</section>
+
+
+
+<footer>
+    <p>© 2023 Cricket World</p>
+</footer>
+
+<script>
+    $(document).ready(function () {
+       // Function to fetch data from the API with offset
+    function fetchFromAPI(apiURL, sectionID, contentID, cb) {
+        $.get(apiURL, function (data) {
+            if (data.status != "success") {
+                alert("Failed to fetch data from the API");
+                return;
+            }
+
+            let dataArray = data.data;
+            if (!dataArray) {
+                cb([]);
+            } else {
+                cb(dataArray);
+            }
+        });
+    }
+
+    // Function to update content
+    function updateContent(sectionID, contentID, data) {
+        // Update the content of the specified contentID with data
+        $("#" + contentID).html(JSON.stringify(data));
+    }
+
+    // API URLs
+    var currentMatchesAPI = "https://api.cricapi.com/v1/currentMatches?apikey=c7ed0d02-47dc-4143-9aa7-cd38a3211ac6&offset=0";
+    var scoreAPI = "https://api.cricapi.com/v1/cricScore?apikey=c7ed0d02-47dc-4143-9aa7-cd38a3211ac6";
+    var matchesListAPI = "https://api.cricapi.com/v1/matches?apikey=c7ed0d02-47dc-4143-9aa7-cd38a3211ac6&offset=0";
+    var playersListAPI = "https://api.cricapi.com/v1/players?apikey=c7ed0d02-47dc-4143-9aa7-cd38a3211ac6&offset=0";
+
+    // Fetch data for Current Matches section
+    fetchFromAPI(currentMatchesAPI, "CurrentMatches", "currentMatchesContent", function (data) {
+        console.log("Complete data for Current Matches section:", data);
+        // Update the content of the Current Matches section
+        updateContent("CurrentMatches", "currentMatchesContent", data);
+    });
+
+    // Fetch data for Scores section
+    fetchFromAPI(scoreAPI, "Scores", "scoresContent", function (data) {
+        console.log("Complete data for Scores section:", data);
+        // Update the content of the Scores section
+        updateContent("Scores", "scoresContent", data);
+    });
+
+    // Fetch data for Matches List section
+    fetchFromAPI(matchesListAPI, "MatchesList", "matchesListContent", function (data) {
+        console.log("Complete data for Matches List section:", data);
+        // Update the content of the Matches List section
+        updateContent("MatchesList", "matchesListContent", data);
+    });
+
+    // Fetch data for Players List section
+    fetchFromAPI(playersListAPI, "PlayersList", "playersListContent", function (data) {
+        console.log("Complete data for Players List section:", data);
+        // Update the content of the Players List section
+        updateContent("PlayersList", "playersListContent", data);
+    });
+});
+
+    ;
+</script>
+
+</body>
+</html>
